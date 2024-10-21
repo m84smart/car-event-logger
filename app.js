@@ -1,11 +1,16 @@
-// Array to store events
-let events = [];
+// Array to store events (from local storage if available)
+let events = JSON.parse(localStorage.getItem('events')) || [];
 
 // Get DOM elements
 const eventList = document.getElementById('eventList');
 const totalEventsElem = document.getElementById('totalEvents');
 const averageDistanceElem = document.getElementById('averageDistance');
 const lastEventElem = document.getElementById('lastEvent');
+
+// Function to save events to local storage
+function saveEvents() {
+    localStorage.setItem('events', JSON.stringify(events));
+}
 
 // Add a new event
 function addEvent() {
@@ -27,6 +32,10 @@ function addEvent() {
     events.push(event);
     events.sort((a, b) => new Date(a.date) - new Date(b.date)); // Sort by date
 
+    // Save events to local storage
+    saveEvents();
+
+    // Update the display
     updateDisplay();
 }
 
@@ -45,6 +54,19 @@ function updateDisplay() {
     events.forEach((event, index) => {
         const listItem = document.createElement('li');
         listItem.textContent = `Event ${index + 1} - Date: ${event.date}, Kilometer: ${event.kilometer}`;
+        
+        // Add Edit and Delete buttons
+        const editButton = document.createElement('button');
+        editButton.textContent = 'Edit';
+        editButton.onclick = () => editEvent(index);
+
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Delete';
+        deleteButton.onclick = () => deleteEvent(index);
+
+        listItem.appendChild(editButton);
+        listItem.appendChild(deleteButton);
+
         eventList.appendChild(listItem);
 
         // Track the total distance
@@ -133,3 +155,8 @@ function updateChart(labels, timeDifferences, distanceDifferences) {
         }
     });
 }
+
+// Load events from local storage and display them on page load
+window.onload = function() {
+    updateDisplay();
+};
