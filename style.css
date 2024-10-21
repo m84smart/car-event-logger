@@ -121,6 +121,29 @@ canvas {
     height: auto;
 }
 
+@media (max-width: 600px) {
+    .container {
+        padding: 15px;
+    }
+
+    button {
+        width: 100%;
+        font-size: 16px; /* Increased font size for better readability */
+        padding: 15px; /* Increase padding for larger touch target */
+    }
+
+    ul#eventList li {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    ul#eventList li button {
+        margin: 5px 0;
+        width: 100%; /* Make buttons full width for easier tapping */
+    }
+}
+
+
 /* Responsive Design */
 @media (max-width: 600px) {
     .container {
