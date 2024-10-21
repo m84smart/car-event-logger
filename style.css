@@ -23,17 +23,20 @@ h1, h2 {
     text-align: center;
 }
 
-/* Form Styles */
+/* Updated Form Styles */
 form {
     margin-bottom: 30px;
     display: flex;
     flex-direction: column;
+    align-items: center; /* Center the input elements */
 }
 
 label {
-    margin-bottom: 10px;
+    margin-bottom: 5px; /* Adjusted margin for labels */
     font-weight: 500;
     color: #34495e;
+    text-align: left; /* Align label text to the left */
+    width: 100%; /* Make label full width for better alignment */
 }
 
 input[type="date"],
@@ -43,7 +46,8 @@ input[type="number"] {
     border: 1px solid #ccc;
     border-radius: 4px;
     font-size: 16px;
-    width: 100%;
+    width: 100%; /* Keep the input full width */
+    max-width: 300px; /* Limit max width for better aesthetics */
 }
 
 button {
@@ -55,7 +59,8 @@ button {
     cursor: pointer;
     border-radius: 4px;
     width: 150px;
-    align-self: center;
+    align-self: center; /* Center the button */
+    margin-top: 10px; /* Add margin for spacing */
 }
 
 button:hover {
@@ -82,68 +87,4 @@ ul#eventList li button {
     margin-left: 10px;
     background-color: #e74c3c;
     padding: 5px 10px;
-    font-size: 14px;
-    width: auto;
-    border-radius: 4px;
-}
-
-ul#eventList li button:hover {
-    background-color: #c0392b;
-}
-
-ul#eventList li button:first-child {
-    background-color: #2ecc71;
-}
-
-ul#eventList li button:first-child:hover {
-    background-color: #27ae60;
-}
-
-/* Summary Section */
-h2 {
-    margin-top: 40px;
-}
-
-p {
-    font-size: 18px;
-    margin: 10px 0;
-}
-
-span {
-    font-weight: bold;
-}
-
-/* Chart Styles */
-canvas {
-    margin: 40px 0;
-    display: block;
-    width: 100%;
-    height: auto;
-}
-
-/* Responsive Design */
-@media (max-width: 600px) {
-    .container {
-        padding: 15px;
-    }
-
-    button {
-        width: 100%;
-        font-size: 16px; /* Increased font size for better readability */
-        padding: 15px; /* Increase padding for larger touch target */
-    }
-
-    ul#eventList li {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    ul#eventList li button {
-        margin: 5px 0;
-        width: 100%; /* Make buttons full width for easier tapping */
-    }
-}
-
-
-
-
+    font-size: 
