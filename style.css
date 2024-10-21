@@ -121,6 +121,7 @@ canvas {
     height: auto;
 }
 
+/* Responsive Design */
 @media (max-width: 600px) {
     .container {
         padding: 15px;
@@ -144,23 +145,5 @@ canvas {
 }
 
 
-/* Responsive Design */
-@media (max-width: 600px) {
-    .container {
-        padding: 15px;
-    }
 
-    button {
-        width: 100%;
-        font-size: 14px;
-    }
 
-    ul#eventList li {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    ul#eventList li button {
-        margin: 5px 0;
-    }
-}
