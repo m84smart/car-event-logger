@@ -156,6 +156,53 @@ function updateChart(labels, timeDifferences, distanceDifferences) {
     });
 }
 
+// Step 2: Delete event by index
+function deleteEvent(index) {
+    events.splice(index, 1); // Remove the event at the specified index
+    saveEvents(); // Save the updated list to local storage
+    updateDisplay(); // Update the UI
+}
+
+// Step 2: Edit event
+function editEvent(index) {
+    const event = events[index];
+    document.getElementById('eventDate').value = event.date;
+    document.getElementById('kilometerReading').value = event.kilometer;
+
+    // Once user submits, we'll modify the existing entry instead of adding a new one
+    const submitButton = document.querySelector('button');
+    submitButton.textContent = 'Update Event';
+    submitButton.onclick = () => updateEvent(index);
+}
+
+function updateEvent(index) {
+    const eventDate = document.getElementById('eventDate').value;
+    const kilometerReading = document.getElementById('kilometerReading').value;
+
+    // Validate input
+    if (!eventDate || !kilometerReading) {
+        alert('Please fill out both fields.');
+        return;
+    }
+
+    // Update the existing event
+    events[index] = {
+        date: eventDate,
+        kilometer: parseInt(kilometerReading, 10)
+    };
+
+    // Save the updated event to local storage
+    saveEvents();
+
+    // Reset the button to default "Log Event" functionality
+    const submitButton = document.querySelector('button');
+    submitButton.textContent = 'Log Event';
+    submitButton.onclick = addEvent;
+
+    // Update the display
+    updateDisplay();
+}
+
 // Load events from local storage and display them on page load
 window.onload = function() {
     updateDisplay();
