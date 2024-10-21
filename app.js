@@ -1,6 +1,10 @@
 // Array to store events (from local storage if available)
 let events = JSON.parse(localStorage.getItem('events')) || [];
 
+// Flags to control editing state
+let isEditing = false;
+let editIndex = null;
+
 // Get DOM elements
 const eventList = document.getElementById('eventList');
 const totalEventsElem = document.getElementById('totalEvents');
@@ -10,6 +14,15 @@ const lastEventElem = document.getElementById('lastEvent');
 // Function to save events to local storage
 function saveEvents() {
     localStorage.setItem('events', JSON.stringify(events));
+}
+
+// Add or Update event (depending on mode)
+function addOrUpdateEvent() {
+    if (isEditing) {
+        updateEvent();
+    } else {
+        addEvent();
+    }
 }
 
 // Add a new event
@@ -35,8 +48,8 @@ function addEvent() {
     // Save events to local storage
     saveEvents();
 
-    // Update the display
-    updateDisplay();
+    // Reset the form and update display
+    resetForm();
 }
 
 // Update the display and summary
@@ -71,7 +84,6 @@ function updateDisplay() {
 
         // Track the total distance
         if (index > 0) {
-            totalDistance += event.kilometer - events[index - 1].kilometer;
             const distanceBetweenEvents = event.kilometer - events[index - 1].kilometer;
             distanceDifferences.push(distanceBetweenEvents);
 
@@ -81,10 +93,6 @@ function updateDisplay() {
             const timeBetweenEvents = Math.floor((date1 - date2) / (1000 * 60 * 60 * 24));
             timeDifferences.push(timeBetweenEvents);
         }
-
-        // Track the last and second-last events
-        secondLastEvent = lastEvent;
-        lastEvent = event;
 
         // Collect dates for graph labels
         eventDates.push(event.date);
@@ -110,34 +118,32 @@ function updateDisplay() {
 // Function to create or update the chart
 function updateChart(labels, timeDifferences, distanceDifferences) {
     const ctx = document.getElementById('eventChart').getContext('2d');
-    
-    const chartData = {
-        labels: labels,
-        datasets: [
-            {
-                label: 'Days Between Events',
-                data: timeDifferences,
-                borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 2,
-                fill: false
-            },
-            {
-                label: 'Kilometers Between Events',
-                data: distanceDifferences,
-                borderColor: 'rgba(255, 99, 132, 1)',
-                borderWidth: 2,
-                fill: false
-            }
-        ]
-    };
 
     if (window.eventChart) {
-        window.eventChart.destroy();  // If chart exists, destroy it before creating a new one
+        window.eventChart.destroy();  // Destroy old chart instance if any
     }
 
     window.eventChart = new Chart(ctx, {
         type: 'line',
-        data: chartData,
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Days Between Events',
+                    data: timeDifferences,
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 2,
+                    fill: false
+                },
+                {
+                    label: 'Kilometers Between Events',
+                    data: distanceDifferences,
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 2,
+                    fill: false
+                }
+            ]
+        },
         options: {
             responsive: true,
             title: {
@@ -146,9 +152,10 @@ function updateChart(labels, timeDifferences, distanceDifferences) {
             },
             scales: {
                 x: {
-                    type: 'time',
-                    time: {
-                        unit: 'day'
+                    type: 'category',
+                    title: {
+                        display: true,
+                        text: 'Event Dates'
                     }
                 }
             }
@@ -156,26 +163,30 @@ function updateChart(labels, timeDifferences, distanceDifferences) {
     });
 }
 
-// Step 2: Delete event by index
+// Delete event by index
 function deleteEvent(index) {
     events.splice(index, 1); // Remove the event at the specified index
     saveEvents(); // Save the updated list to local storage
     updateDisplay(); // Update the UI
 }
 
-// Step 2: Edit event
+// Edit event
 function editEvent(index) {
     const event = events[index];
     document.getElementById('eventDate').value = event.date;
     document.getElementById('kilometerReading').value = event.kilometer;
 
-    // Once user submits, we'll modify the existing entry instead of adding a new one
+    // Switch to "edit mode"
+    isEditing = true;
+    editIndex = index;
+
+    // Change button text to "Update Event"
     const submitButton = document.querySelector('button');
     submitButton.textContent = 'Update Event';
-    submitButton.onclick = () => updateEvent(index);
 }
 
-function updateEvent(index) {
+// Update event
+function updateEvent() {
     const eventDate = document.getElementById('eventDate').value;
     const kilometerReading = document.getElementById('kilometerReading').value;
 
@@ -185,25 +196,30 @@ function updateEvent(index) {
         return;
     }
 
-    // Update the existing event
-    events[index] = {
-        date: eventDate,
-        kilometer: parseInt(kilometerReading, 10)
-    };
+    if (isEditing && editIndex !== null) {
+        // Update the existing event
+        events[editIndex] = {
+            date: eventDate,
+            kilometer: parseInt(kilometerReading, 10)
+        };
 
-    // Save the updated event to local storage
-    saveEvents();
+        // Save the updated events to local storage
+        saveEvents();
 
-    // Reset the button to default "Log Event" functionality
-    const submitButton = document.querySelector('button');
-    submitButton.textContent = 'Log Event';
-    submitButton.onclick = addEvent;
-
-    // Update the display
-    updateDisplay();
+        // Reset form and mode
+        resetForm();
+    }
 }
 
-// Load events from local storage and display them on page load
-window.onload = function() {
-    updateDisplay();
-};
+// Reset form after editing/adding
+function resetForm() {
+    document.getElementById('eventDate').value = '';
+    document.getElementById('kilometerReading').value = '';
+    document.querySelector('button').textContent = 'Log Event';
+    isEditing = false;
+    editIndex = null;
+    updateDisplay();  // Update the display after resetting
+}
+
+// Load events from storage and update the display
+window.onload = updateDisplay;
