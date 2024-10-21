@@ -87,4 +87,67 @@ ul#eventList li button {
     margin-left: 10px;
     background-color: #e74c3c;
     padding: 5px 10px;
-    font-size: 
+    font-size: 14px;
+    width: auto;
+    border-radius: 4px;
+}
+
+ul#eventList li button:hover {
+    background-color: #c0392b;
+}
+
+ul#eventList li button:first-child {
+    background-color: #2ecc71;
+}
+
+ul#eventList li button:first-child:hover {
+    background-color: #27ae60;
+}
+
+/* Summary Section */
+h2 {
+    margin-top: 40px;
+}
+
+p {
+    font-size: 18px;
+    margin: 10px 0;
+}
+
+span {
+    font-weight: bold;
+}
+
+/* Chart Styles */
+canvas {
+    margin: 40px 0;
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .container {
+        padding: 15px;
+    }
+
+    input[type="date"],
+    input[type="number"] {
+        max-width: 100%; /* Full width on mobile */
+    }
+
+    button {
+        width: 100%; /* Full width for buttons on mobile */
+    }
+
+    ul#eventList li {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    ul#eventList li button {
+        margin: 5px 0;
+        width: 100%; /* Make buttons full width for easier tapping */
+    }
+}
