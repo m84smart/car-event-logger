@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Event Logger</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Car Event Logger</h1>
+        
+        <!-- Input Form for Event Logging -->
+        <div class="input-section">
+            <label for="eventDate">Event Date:</label>
+            <input type="date" id="eventDate" required>
+
+            <label for="kilometerReading">Kilometer Reading:</label>
+            <input type="number" id="kilometerReading" required>
+
+            <button onclick="addEvent()">Log Event</button>
+        </div>
+
+        <!-- Summary Section -->
+        <div class="summary-section">
+            <h2>Summary</h2>
+            <p>Total Events: <span id="totalEvents">0</span></p>
+            <p>Average Distance Between Events: <span id="averageDistance">0</span> km</p>
+            <p>Last Event: <span id="lastEvent">None</span></p>
+            <p>Distance Between Last Two Events: <span id="distanceBetweenLastEvents">N/A</span> km</p>
+        </div>
+
+        <!-- Event List -->
+        <div class="event-list-section">
+            <h2>Event List</h2>
+            <ul id="eventList"></ul>
+        </div>
+
+        <!-- Trend Graph Section -->
+        <div class="chart-section">
+            <h2>Event Trends</h2>
+            <canvas id="eventChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Link the JavaScript -->
+    <script src="app.js"></script>
+</body>
+</html>
